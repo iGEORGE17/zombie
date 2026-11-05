@@ -19,6 +19,13 @@ export class Input {
     return { x, y, len };
   }
 
+  /** Drop held keys/buttons, e.g. when focus leaves the iframe and keyup never arrives. */
+  reset() {
+    this.keys = {};
+    this.mouse.down = false;
+    this.fireHeld = false;
+  }
+
   get firing() {
     return this.mouse.down || !!this.keys.Space || this.fireHeld;
   }

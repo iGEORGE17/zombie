@@ -6,7 +6,11 @@ import { drawEnemy, drawItem, drawPlayer } from './draw';
 import { drawMinimap } from './minimap';
 import { drawDarkness, drawHurtFlash, drawZoneArrow } from './overlay';
 
-export interface View { w: number; h: number; dpr: number; z: number }
+export interface View {
+  w: number; h: number; dpr: number; z: number;
+  /** Camera centre override (cover art); defaults to the player. */
+  focus?: { x: number; y: number };
+}
 
 /** Size the canvas to the window. Zoom keeps ~17 tiles across the short side. */
 export function measureView(canvas: HTMLCanvasElement): View {
@@ -21,8 +25,9 @@ export function render(ctx: CanvasRenderingContext2D, mctx: CanvasRenderingConte
   const { w: vw, h: vh, dpr, z: Z } = view, p = g.p, ww = vw / Z, wh = vh / Z;
   const cam = g.cam;
   cam.z = Z;
-  cam.x = Math.max(0, Math.min(MW * T - ww, p.x - ww / 2));
-  cam.y = Math.max(0, Math.min(MH * T - wh, p.y - wh / 2));
+  const focus = view.focus ?? p;
+  cam.x = Math.max(0, Math.min(MW * T - ww, focus.x - ww / 2));
+  cam.y = Math.max(0, Math.min(MH * T - wh, focus.y - wh / 2));
   const sx = (Math.random() - 0.5) * g.shake, sy = (Math.random() - 0.5) * g.shake;
   const toScreen = () => ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const toWorld = () => ctx.setTransform(dpr * Z, 0, 0, dpr * Z, (-cam.x + sx) * dpr * Z, (-cam.y + sy) * dpr * Z);

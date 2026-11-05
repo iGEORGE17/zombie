@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Antidote Run · cover</title>
+  <style>
+    html,body{margin:0;height:100%;overflow:hidden;background:#0b0d12}
+    canvas{position:fixed;inset:0;width:100%;height:100%}
+    .title{position:fixed;font-family:"Saira Stencil One",Impact,sans-serif;color:#e6e2d6;line-height:.86;margin:0;font-weight:400;
+      text-shadow:0 .04em .12em rgba(0,0,0,.85)}
+    .title span{color:#5fe3d0;display:block}
+    /* landscape: lower-left; portrait/square: top, centred */
+    body.land .title{left:5vw;bottom:9vh;font-size:11.5vw}
+    body.tall .title,body.square .title{left:0;right:0;top:6vh;text-align:center;font-size:18.5vw}
+    .shade{position:fixed;inset:0;pointer-events:none}
+    body.land .shade{background:linear-gradient(90deg,rgba(5,6,9,.88) 0%,rgba(5,6,9,.55) 32%,rgba(5,6,9,0) 55%)}
+    body.tall .shade,body.square .shade{background:linear-gradient(180deg,rgba(5,6,9,.85) 0%,rgba(5,6,9,.3) 36%,rgba(5,6,9,0) 55%)}
+  </style>
+</head>
+<body>
+  <canvas id="cv"></canvas>
+  <div class="shade"></div>
+  <h1 class="title">Antidote <span>Run</span></h1>
+  <script type="module" src="./covers.ts"></script>
+</body>
+</html>

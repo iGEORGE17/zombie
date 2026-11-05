@@ -15,5 +15,4 @@ export function attachPointer(input: Input, canvas: HTMLCanvasElement) {
   const up = (e: PointerEvent) => { if (e.pointerType !== 'touch') input.mouse.down = false; };
   addEventListener('pointerup', up);
   addEventListener('pointercancel', up);
-  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 }

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0d12">
   <title>Antidote Run</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=IBM+Plex+Mono:wght@400;600&display=swap">
+  <meta name="description" content="Top-down zombie survival shooter. Follow Dr. Okoro's journal across a fallen city and take the antidote before the infection takes you.">
+  <!-- CrazyGames SDK v3: must load before game code. Safe to fail; the game runs without it. -->
+  <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 </head>
 <body>
   <div id="game"><canvas id="cv"></canvas></div>
@@ -27,20 +27,24 @@
 
   <div class="screen" id="menu">
     <div class="card">
+      <div class="col">
       <div class="eyebrow">Outbreak day 17 · Lazarus strain</div>
       <h1>Antidote <span>Run</span></h1>
       <p class="brief">The city has turned. Before she vanished, <strong>Dr. Ada Okoro</strong> split the antidote formula into three journal pages and hid them across the city. The Ash Crew, a gang of armed scavengers led by <strong>Kane, the Warden</strong>, want it to sell. Follow the trail page by page. Each one marks the search zone for the next. The last leads to the lab, where Kane is waiting with the cure.</p>
       <p class="brief">You are bitten. Your infection climbs every second. Suppressant vials buy you time.</p>
+      </div>
+      <div class="col">
+      <fieldset class="mode" id="mode"><legend>Difficulty</legend></fieldset>
+      <button class="btn" id="startBtn" disabled>Enter the city</button>
       <div class="keys">
-        <div><kbd>WASD</kbd>Move</div>
+        <div><kbd>WASD</kbd>Move (or arrows)</div>
         <div><kbd>Mouse</kbd>Aim and hold to shoot</div>
         <div><kbd>Space</kbd>Shoot</div>
         <div><kbd>P</kbd>Pause</div>
         <div>Out of ammo? You swing a bat.</div>
         <div>Touch: left stick, FIRE auto-aims</div>
       </div>
-      <fieldset class="mode" id="mode"><legend>Difficulty</legend></fieldset>
-      <button class="btn" id="startBtn">Enter the city</button>
+      </div>
     </div>
   </div>
   <div class="screen" id="end" hidden>

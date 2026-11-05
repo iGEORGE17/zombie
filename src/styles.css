@@ -36,9 +36,12 @@ canvas#cv{display:block;width:100%;height:100%;cursor:crosshair}
 .msg.journal em{color:var(--amber)}
 
 /* Overlays */
-.screen{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 40%,rgba(11,13,18,.55),rgba(5,6,9,.94));
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,rgba(11,13,18,.55),rgba(5,6,9,.94));
   padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow:auto}
-.card{max-width:560px;width:100%;display:grid;gap:16px}
+.card{max-width:560px;width:100%;display:grid;gap:16px;margin:auto} /* auto margins centre without clipping when content overflows */
+.col{display:grid;gap:16px;align-content:start}
+.col .brief{margin:0}
+.col .brief + .brief{margin-top:-2px}
 .eyebrow{font-size:10px;letter-spacing:.24em;color:var(--blood);text-transform:uppercase}
 h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,11vw,84px);line-height:.9;margin:0;color:var(--ink);text-wrap:balance;letter-spacing:.01em}
 h1 span{color:var(--serum)}
@@ -73,3 +76,27 @@ h1 span{color:var(--serum)}
 
 @media (max-width:620px){#mm{width:126px;height:98px}#stats{min-width:150px;padding:8px 10px}#radio{bottom:calc(220px + env(safe-area-inset-bottom,0px))}}
 @media (prefers-reduced-motion:reduce){.fill,.msg{transition:none}}
+.btn:disabled{opacity:.55;cursor:progress}
+
+/* Short, wide frames (CrazyGames iframes go down to 800x450): two-column menu so Start stays on screen. */
+@media (max-height:720px) and (min-width:700px){
+  #menu .card{max-width:920px;grid-template-columns:1.15fr 1fr;gap:32px;align-items:center}
+  #menu h1{font-size:clamp(40px,6.4vw,64px)}
+  #menu .brief{font-size:12px;line-height:1.55}
+  #menu .col{gap:12px}
+  .mode{grid-template-columns:1fr;gap:6px}
+  .mode label{padding:7px 10px}
+  .mode b{font-size:16px}
+  .keys{grid-template-columns:1fr 1fr;font-size:10.5px;gap:4px 12px}
+  .btn{font-size:20px;padding:10px 22px}
+}
+
+/* Touch in landscape: keep the radio log clear of the stick and FIRE button, between the stats and minimap. */
+@media (pointer:coarse) and (min-width:621px){
+  #radio{top:calc(10px + env(safe-area-inset-top,0px));bottom:auto;left:50%;transform:translateX(-50%);width:min(360px,calc(100vw - 460px))}
+  #radio .msg:not(:last-child){display:none}
+  #obj{bottom:calc(8px + env(safe-area-inset-bottom,0px));padding:6px 12px;font-size:11px}
+}
+
+/* While a menu/pause/end screen is up, hide the HUD so it never collides with the screen text. */
+body:has(.screen:not([hidden])) :is(.hud, #touch){visibility:hidden}

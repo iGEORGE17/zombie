@@ -10,8 +10,10 @@ export function burst(g: Game, x: number, y: number, c: string, n: number, speed
 }
 
 export function updateFx(g: Game, dt: number) {
+  // Damping as a function of dt (0.9 per 60 Hz frame) so particles look the same at 60/144/165 Hz.
+  const damp = Math.pow(0.9, dt * 60);
   for (const f of g.fx) {
-    f.life -= dt; f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= 0.9; f.vy *= 0.9;
+    f.life -= dt; f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= damp; f.vy *= damp;
   }
   g.fx = g.fx.filter((f) => f.life > 0);
   g.shake = Math.max(0, g.shake - dt * 20);
