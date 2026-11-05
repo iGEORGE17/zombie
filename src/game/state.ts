@@ -19,7 +19,7 @@ export function newGame(level: Level, hooks: Hooks, { diff = DIFFICULTY.standard
   const g: Game = {
     level, world, flow: new FlowField(), rng, hooks, diff, cam: { x: 0, y: 0, z: 1 },
     t: 0,
-    p: { x: PLAYER.start.x, y: PLAYER.start.y, r: PLAYER.radius, hp: PLAYER.hp, inf: 0, ammo: diff.startAmmo, cd: 0, ang: 0, hurt: 0, swing: 0 },
+    p: { x: PLAYER.start.x, y: PLAYER.start.y, r: PLAYER.radius, hp: PLAYER.hp, inf: 0, ammo: diff.startAmmo, cd: 0, ang: 0, hurt: 0, swing: 0, target: null },
     enemies: [], bullets: [], items: [], fx: [], decals: [], boss,
     pages: 0, pagePos: [], kills: 0, zone: null, goal: '',
     spawnT: SPAWN.initialDelay, flowT: 0, shake: 0, over: false,

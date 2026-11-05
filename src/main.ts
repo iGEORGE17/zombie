@@ -13,7 +13,7 @@ import { attachPointer } from './input/pointer';
 import { attachTouch } from './input/touch';
 import { platform } from './platform/crazygames';
 import { measureView, render } from './render/renderer';
-import { loadDifficulty, saveDifficulty } from './save/prefs';
+import { loadAimMode, loadDifficulty, saveAimMode, saveDifficulty } from './save/prefs';
 import { Hud } from './ui/hud';
 import { Radio } from './ui/radio';
 import { hideScreens, mountDifficultyPicker, setPaused, showEnd } from './ui/screens';
@@ -29,6 +29,7 @@ const againBtn = $<HTMLButtonElement>('againBtn');
 const hud = new Hud();
 const radio = new Radio($('radio'));
 const input = new Input();
+input.aimMode = loadAimMode();
 
 let state: State = 'menu';
 let difficulty = loadDifficulty();
@@ -98,7 +99,7 @@ function frame(now: number) {
   if (state === 'play') update(game, input, dt);
   render(ctx, mctx, game, view);
   if (now - lastHud > 100) {
-    hud.update(game);
+    hud.update(game, input);
     radio.tick(now);
     lastHud = now;
   }
@@ -112,7 +113,15 @@ function boot() {
   game = freshGame(); // attract mode: a live, paused city behind the menu
 
   mountDifficultyPicker(difficulty, (id) => { difficulty = id; saveDifficulty(id); });
-  attachKeyboard(input, () => (state === 'play' ? pause() : resume()));
+  attachKeyboard(
+    input,
+    () => (state === 'play' ? pause() : resume()),
+    () => {
+      input.aimMode = input.aimMode === 'auto' ? 'manual' : 'auto';
+      saveAimMode(input.aimMode);
+      radio.push('Aim', input.aimMode === 'auto' ? 'Auto-aim on. Point at an enemy to pick it.' : 'Manual aim. Aim with the mouse.');
+    },
+  );
   attachPointer(input, canvas);
   attachTouch(input, canvas, $('knob'), $('fire'));
   addEventListener('blur', () => pause(true));
@@ -146,7 +155,7 @@ if (import.meta.env.DEV) {
             pilot(game, input, dt);
             if (state === 'play') update(game, input, dt);
             render(ctx, mctx, game, view);
-            hud.update(game);
+            hud.update(game, input);
             radio.tick(performance.now());
             return clock;
           },

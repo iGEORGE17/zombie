@@ -9,6 +9,8 @@ export interface Player {
   hp: number; inf: number; ammo: number;
   /** Weapon cooldown, aim angle, hurt flash and bat swing timers. */
   cd: number; ang: number; hurt: number; swing: number;
+  /** Current auto-aim lock (null in manual aim or with nothing in range). */
+  target: Enemy | null;
 }
 
 export interface Enemy {

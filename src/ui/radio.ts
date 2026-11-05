@@ -1,9 +1,13 @@
 interface Msg { who: string; text: string; cls: string; t: number }
 
 const VISIBLE = 3;
-const FADE_AFTER_MS = 11000;
+/** Pickups and radio chatter clear fast; journal pages carry the story, so they stay a little longer. */
+const SHOW_MS = 1800;
+const JOURNAL_SHOW_MS = 5000;
+/** Matches the .msg opacity transition. */
+const FADE_MS = 600;
 
-/** Radio log: last three messages, fading out after 11 s. */
+/** Radio log: last three messages, each fading out after its show time. */
 export class Radio {
   private msgs: Msg[] = [];
   constructor(private readonly box: HTMLElement) {}
@@ -30,7 +34,13 @@ export class Radio {
   }
 
   tick(now: number) {
-    for (const el of this.box.children as HTMLCollectionOf<HTMLElement>)
-      el.style.opacity = now - Number(el.dataset.t) > FADE_AFTER_MS ? '0' : '1';
+    for (const el of [...this.box.children] as HTMLElement[]) {
+      const show = el.classList.contains('journal') ? JOURNAL_SHOW_MS : SHOW_MS;
+      const age = now - Number(el.dataset.t);
+      if (age > show + FADE_MS) {
+        el.remove();
+        this.msgs = this.msgs.filter((m) => String(m.t) !== el.dataset.t);
+      } else el.style.opacity = age > show ? '0' : '1';
+    }
   }
 }

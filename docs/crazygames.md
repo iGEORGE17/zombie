@@ -37,13 +37,14 @@ Covers show only the title. They are rendered by the game itself (`tools/covers.
 
 ### Description
 
-> You've been bitten, and the infection climbs every second. Before she vanished, Dr. Ada Okoro split the antidote formula across three journal pages hidden in Lazarus City. Follow the trail page by page, fight through the undead horde and the Ash Crew's armed scavengers, then storm the lab and take the cure from their leader, Kane. Grab suppressant vials to hold off the infection and ammo to keep firing; when you run dry, swing the bat. New to it? Beginner mode gives you a slower horde, double ammo and 12 minutes before you turn.
+> You've been bitten, and the infection climbs every second. Before she vanished, Dr. Ada Okoro split the antidote formula across three journal pages hidden in Lazarus City. Follow the trail page by page, fight through the undead horde and the Ash Crew's armed scavengers, then storm the lab and take the cure from their leader, Kane. Grab suppressant vials to hold off the infection and ammo to keep firing; when you run dry, swing the bat. Auto-aim locks onto the nearest threat and on-screen hints always tell you what to do next. New to it? Beginner mode gives you a slower horde, 1000 rounds and 12 minutes before you turn.
 
 ### Controls
 
 > WASD or arrow keys: move
-> Mouse: aim, hold left button to shoot
-> Space: shoot
+> Space or hold left mouse button: shoot (auto-aims at the nearest enemy)
+> Mouse: point at an enemy to target it
+> T: switch auto-aim on/off (manual aim follows the mouse)
 > P: pause
 > Touch: left joystick to move, FIRE button auto-aims at the nearest enemy
 

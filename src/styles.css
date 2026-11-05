@@ -29,6 +29,10 @@ canvas#cv{display:block;width:100%;height:100%;cursor:crosshair}
 #obj{bottom:calc(14px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);
   background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);padding:8px 14px;max-width:min(520px,calc(100vw - 32px));font-size:12px;border-radius:3px}
 #obj small{display:block;font-size:9px;letter-spacing:.16em;color:var(--amber);text-transform:uppercase;margin-bottom:2px}
+#obj .hint{margin:6px 0 0;padding-top:6px;border-top:1px solid var(--line);color:var(--serum);font-size:11.5px;line-height:1.45}
+#obj .hint:empty{display:none}
+#obj .hint.urgent{color:#ff8a7d}
+.row .hk{font:inherit;font-size:9px;color:var(--mute);border:1px solid var(--line);border-radius:2px;padding:0 4px;margin-left:4px}
 #radio{left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(70px + env(safe-area-inset-bottom,0px));
   width:min(360px,calc(100vw - 32px));display:grid;gap:6px}
 .msg{background:var(--panel);border:1px solid var(--line);padding:8px 10px;line-height:1.45;font-size:11.5px;border-radius:3px;transition:opacity .6s}

@@ -3,22 +3,45 @@ import { angleDiff } from '../core/math';
 import { range } from '../core/rng';
 import type { Input } from '../input/input';
 import { damageEnemy } from './combat';
-import type { Game } from './types';
+import type { Enemy, Game } from './types';
+
+/** How close (world px) the cursor must be to an enemy to hand-pick it over the auto target. */
+const PICK_RADIUS = 48;
+
+/**
+ * Auto-aim target: an enemy the cursor is pointing at (manual pick) if any,
+ * otherwise the nearest enemy in range with line of sight.
+ */
+export function pickTarget(g: Game, input: Input): Enemy | null {
+  const p = g.p, { cam } = g;
+  const cx = input.mouse.x / cam.z + cam.x, cy = input.mouse.y / cam.z + cam.y;
+  let nearest: Enemy | null = null, nd = PLAYER.autoAimRange;
+  let picked: Enemy | null = null, pd = Infinity;
+  for (const e of g.enemies) {
+    if (e.dead) continue;
+    const d = Math.hypot(e.x - p.x, e.y - p.y);
+    if (d >= PLAYER.autoAimRange || !g.world.los(p.x, p.y, e.x, e.y)) continue;
+    if (d < nd) { nd = d; nearest = e; }
+    if (!input.touchMode) {
+      const dc = Math.hypot(e.x - cx, e.y - cy);
+      if (dc < PICK_RADIUS + e.r && dc < pd) { pd = dc; picked = e; }
+    }
+  }
+  return picked ?? nearest;
+}
 
 export function updatePlayer(g: Game, input: Input, dt: number) {
   const p = g.p;
   const mv = input.move();
   g.world.move(p, mv.x * PLAYER.speed * dt, mv.y * PLAYER.speed * dt);
 
-  // Aim: touch auto-targets the nearest visible enemy; mouse aims at the cursor in world space.
-  if (input.touchMode) {
-    let best = null, bd = PLAYER.autoAimRange;
-    for (const e of g.enemies) {
-      const d = Math.hypot(e.x - p.x, e.y - p.y);
-      if (d < bd && g.world.los(p.x, p.y, e.x, e.y)) { bd = d; best = e; }
-    }
-    if (best) p.ang = Math.atan2(best.y - p.y, best.x - p.x);
-    else if (mv.len > 0.2) p.ang = Math.atan2(mv.y, mv.x);
+  // Aim: auto-aim by default (always on touch); manual mode aims at the cursor.
+  const auto = input.touchMode || input.aimMode === 'auto';
+  p.target = auto ? pickTarget(g, input) : null;
+  if (p.target) {
+    p.ang = Math.atan2(p.target.y - p.y, p.target.x - p.x);
+  } else if (input.touchMode) {
+    if (mv.len > 0.2) p.ang = Math.atan2(mv.y, mv.x);
   } else {
     const { cam } = g;
     p.ang = Math.atan2(input.mouse.y / cam.z + cam.y - p.y, input.mouse.x / cam.z + cam.x - p.x);

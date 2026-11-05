@@ -1,6 +1,10 @@
 /** Unified input state. Devices write into it; the simulation only reads it. */
+export type AimMode = 'auto' | 'manual';
+
 export class Input {
   keys: Record<string, boolean> = {};
+  /** Auto-aim locks onto enemies; manual aims at the cursor. Touch always auto-aims. */
+  aimMode: AimMode = 'auto';
   /** Mouse position in CSS pixels. */
   mouse = { x: 0, y: 0, down: false };
   /** True once the last pointer used was a finger; switches aiming to auto-aim. */

@@ -10,12 +10,13 @@ const isFormControl = (t: EventTarget | null) =>
  * Uses physical key codes (KeyW…) so AZERTY players get ZQSD automatically.
  * Pause is P only: Escape is reserved by CrazyGames for leaving fullscreen.
  */
-export function attachKeyboard(input: Input, onPause: () => void) {
+export function attachKeyboard(input: Input, onPause: () => void, onToggleAim: () => void) {
   addEventListener('keydown', (e) => {
     // Let focused buttons/radios keep Space/arrow behaviour (menu navigation).
     if (SCROLL_KEYS.has(e.code) && !isFormControl(e.target)) e.preventDefault();
     input.keys[e.code] = true;
     if (e.code === 'KeyP' && !e.repeat) onPause();
+    if (e.code === 'KeyT' && !e.repeat) onToggleAim();
   });
   addEventListener('keyup', (e) => { input.keys[e.code] = false; });
 

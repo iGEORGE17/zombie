@@ -18,10 +18,11 @@
     <div class="row"><span>Ammo</span><b id="ammo">90</b></div>
     <div class="row"><span>Journal</span><b id="pages">0 / 3</b></div>
     <div class="row"><span>Kills</span><b id="kills">0</b></div>
+    <div class="row"><span>Aim <kbd class="hk">T</kbd></span><b id="aim">AUTO</b></div>
   </div>
   <div class="hud" id="mmWrap"><canvas id="mm" width="216" height="168"></canvas><div class="cap"><span>Lazarus City</span><span id="clock">00:00</span></div></div>
   <div class="hud" id="radio"></div>
-  <div class="hud" id="obj"><small>Objective</small><span id="objT">Find page 1 of Dr. Okoro's journal</span></div>
+  <div class="hud" id="obj"><small>Objective</small><span id="objT">Find page 1 of Dr. Okoro's journal</span><p class="hint" id="hintT"></p></div>
 
   <div id="touch"><div id="stick"><div id="knob"></div></div><button id="fire" aria-label="Fire">FIRE</button></div>
 
@@ -38,8 +39,9 @@
       <button class="btn" id="startBtn" disabled>Enter the city</button>
       <div class="keys">
         <div><kbd>WASD</kbd>Move (or arrows)</div>
-        <div><kbd>Mouse</kbd>Aim and hold to shoot</div>
-        <div><kbd>Space</kbd>Shoot</div>
+        <div><kbd>Space</kbd>Shoot (auto-aims)</div>
+        <div><kbd>Mouse</kbd>Hold to shoot; point to pick a target</div>
+        <div><kbd>T</kbd>Auto-aim on/off</div>
         <div><kbd>P</kbd>Pause</div>
         <div>Out of ammo? You swing a bat.</div>
         <div>Touch: left stick, FIRE auto-aims</div>

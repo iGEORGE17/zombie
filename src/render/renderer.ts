@@ -69,6 +69,7 @@ export function render(ctx: CanvasRenderingContext2D, mctx: CanvasRenderingConte
     ctx.beginPath(); ctx.arc(f.x, f.y, f.s, 0, 7); ctx.fill();
   }
   ctx.globalAlpha = 1;
+  if (p.target && !p.target.dead) drawReticle(ctx, p.target.x, p.target.y, p.target.r + 7, g.t);
   const b = g.boss;
   if (!b.dead && b.alert) {
     ctx.fillStyle = '#000a'; ctx.fillRect(b.x - 30, b.y - 34, 60, 6);
@@ -80,4 +81,18 @@ export function render(ctx: CanvasRenderingContext2D, mctx: CanvasRenderingConte
   drawHurtFlash(ctx, g, view);
   drawZoneArrow(ctx, g, view, px, py);
   drawMinimap(mctx, g);
+}
+
+/** Amber corner brackets around the auto-aim target. */
+function drawReticle(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, t: number) {
+  const s = r + (reducedMotion ? 0 : Math.sin(t * 8) * 1.5), k = Math.max(5, s * 0.45);
+  ctx.strokeStyle = 'rgba(255,181,71,.9)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    ctx.moveTo(x + sx * s, y + sy * (s - k));
+    ctx.lineTo(x + sx * s, y + sy * s);
+    ctx.lineTo(x + sx * (s - k), y + sy * s);
+  }
+  ctx.stroke();
 }

@@ -106,9 +106,9 @@ export const DIFFICULTY: Record<DifficultyId, Difficulty> = {
   beginner: {
     id: 'beginner',
     label: 'Beginner',
-    blurb: 'Slower horde, double ammo, 12 min before you turn.',
+    blurb: 'Slower horde, 1000 rounds, 12 min before you turn.',
     infectionPerSec: 100 / 720,
-    startAmmo: 180,
+    startAmmo: 1000,
     ammoPickup: 40,
     zombieDropChance: 0.22,
     enemySpeed: 0.75,

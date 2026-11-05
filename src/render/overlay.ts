@@ -30,7 +30,9 @@ export function drawZoneArrow(ctx: Ctx, g: Game, view: View, px: number, py: num
 
   const a = Math.atan2(zy - py, zx - px);
   const reach = Math.min(Math.abs((vw / 2 - m) / Math.cos(a)), Math.abs((vh / 2 - m - 40) / Math.sin(a)));
-  const cx = clamp(px + Math.cos(a) * reach, m, vw - m), cy = clamp(py + Math.sin(a) * reach, m, vh - m);
+  // Keep clear of the objective + hint panel along the bottom edge.
+  const bottom = Math.min(vh - m, vh - 140);
+  const cx = clamp(px + Math.cos(a) * reach, m, vw - m), cy = clamp(py + Math.sin(a) * reach, m, Math.max(m, bottom));
 
   ctx.save(); ctx.translate(cx, cy); ctx.rotate(a);
   ctx.fillStyle = '#ffb547';
