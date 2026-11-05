@@ -29,3 +29,4 @@ legacy/            original single-file prototype (reference)
 ```
 
 The simulation (`game/`, `world/`, `ai/`) never touches the DOM; it reports out through `Hooks` (radio, objective, end), so it runs headless in tests.
+# zombie
