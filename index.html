@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <title>Antidote Run</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=IBM+Plex+Mono:wght@400;600&display=swap">
+</head>
+<body>
+  <div id="game"><canvas id="cv"></canvas></div>
+
+  <div class="hud" id="stats">
+    <div class="bar">Health<div class="track"><div class="fill" id="hpF"></div></div></div>
+    <div class="bar">Infection<div class="track"><div class="fill" id="infF" style="width:0"></div></div></div>
+    <div class="row"><span>Ammo</span><b id="ammo">90</b></div>
+    <div class="row"><span>Journal</span><b id="pages">0 / 3</b></div>
+    <div class="row"><span>Kills</span><b id="kills">0</b></div>
+  </div>
+  <div class="hud" id="mmWrap"><canvas id="mm" width="216" height="168"></canvas><div class="cap"><span>Lazarus City</span><span id="clock">00:00</span></div></div>
+  <div class="hud" id="radio"></div>
+  <div class="hud" id="obj"><small>Objective</small><span id="objT">Find page 1 of Dr. Okoro's journal</span></div>
+
+  <div id="touch"><div id="stick"><div id="knob"></div></div><button id="fire" aria-label="Fire">FIRE</button></div>
+
+  <div class="screen" id="menu">
+    <div class="card">
+      <div class="eyebrow">Outbreak day 17 · Lazarus strain</div>
+      <h1>Antidote <span>Run</span></h1>
+      <p class="brief">The city has turned. Before she vanished, <strong>Dr. Ada Okoro</strong> split the antidote formula into three journal pages and hid them across the city. The Ash Crew, a gang of armed scavengers led by <strong>Kane, the Warden</strong>, want it to sell. Follow the trail page by page. Each one marks the search zone for the next. The last leads to the lab, where Kane is waiting with the cure.</p>
+      <p class="brief">You are bitten. Your infection climbs every second. Suppressant vials buy you time.</p>
+      <div class="keys">
+        <div><kbd>WASD</kbd>Move</div>
+        <div><kbd>Mouse</kbd>Aim and hold to shoot</div>
+        <div><kbd>Space</kbd>Shoot</div>
+        <div><kbd>P</kbd>Pause</div>
+        <div>Out of ammo? You swing a bat.</div>
+        <div>Touch: left stick, FIRE auto-aims</div>
+      </div>
+      <button class="btn" id="startBtn">Enter the city</button>
+    </div>
+  </div>
+  <div class="screen" id="end" hidden>
+    <div class="card">
+      <div class="eyebrow" id="endEye">Signal lost</div>
+      <h1 id="endH">You turned</h1>
+      <p class="brief" id="endP"></p>
+      <div class="stat"><div><span>Time</span><b id="sT">0:00</b></div><div><span>Kills</span><b id="sK">0</b></div><div><span>Pages</span><b id="sP">0/3</b></div></div>
+      <button class="btn" id="againBtn">Run it again</button>
+    </div>
+  </div>
+  <div class="screen" id="pause" hidden>
+    <div class="card"><div class="eyebrow">Holding position</div><h1>Paused</h1><button class="btn" id="resumeBtn">Resume</button></div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
