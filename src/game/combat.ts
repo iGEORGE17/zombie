@@ -1,4 +1,4 @@
-import { ENEMY_BULLET, isZombie } from '../config';
+import { ENEMY_BULLET, ZOMBIE_DROP, isZombie } from '../config';
 import { reducedMotion } from '../core/env';
 import { range } from '../core/rng';
 import { burst } from './fx';
@@ -6,7 +6,7 @@ import { STORY } from './missions';
 import type { Enemy, Game } from './types';
 
 export function enemyShot(g: Game, e: Enemy, a: number, dmg: number) {
-  const { speed, life } = ENEMY_BULLET;
+  const speed = ENEMY_BULLET.speed * g.diff.enemyBulletSpeed, life = ENEMY_BULLET.life / g.diff.enemyBulletSpeed;
   g.bullets.push({
     x: e.x + Math.cos(a) * (e.r + 4), y: e.y + Math.sin(a) * (e.r + 4),
     vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, life, dmg, from: 'enemy',
@@ -14,8 +14,8 @@ export function enemyShot(g: Game, e: Enemy, a: number, dmg: number) {
 }
 
 export function hurtPlayer(g: Game, dmg: number, inf: number) {
-  const p = g.p;
-  p.hp -= dmg; p.inf += inf; p.hurt = 0.25;
+  const p = g.p, k = g.diff.enemyDamage;
+  p.hp -= dmg * k; p.inf += inf * k; p.hurt = 0.25;
   if (!reducedMotion) g.shake = Math.min(8, g.shake + dmg * 0.4);
   burst(g, p.x, p.y, '#b3352c', 6);
 }
@@ -40,8 +40,9 @@ export function damageEnemy(g: Game, e: Enemy, dmg: number, a: number) {
     g.hooks.objective(STORY.grabCure);
   } else if (e.kind === 'scav') {
     g.items.push({ type: r < 0.6 ? 'ammo' : r < 0.85 ? 'med' : 'vial', x: e.x, y: e.y });
-  } else if (r < 0.13) {
-    g.items.push({ type: r < 0.07 ? 'ammo' : r < 0.1 ? 'med' : 'vial', x: e.x, y: e.y });
+  } else if (r < g.diff.zombieDropChance) {
+    const u = r / g.diff.zombieDropChance;
+    g.items.push({ type: u < ZOMBIE_DROP.ammo ? 'ammo' : u < ZOMBIE_DROP.med ? 'med' : 'vial', x: e.x, y: e.y });
   }
 }
 

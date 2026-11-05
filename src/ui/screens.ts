@@ -1,3 +1,4 @@
+import { DIFFICULTY, type DifficultyId } from '../config';
 import { $ } from '../core/dom';
 import { formatTime } from '../core/math';
 import { TOTAL_PAGES } from '../game/missions';
@@ -36,6 +37,27 @@ export function showEnd(g: Game, reason: EndReason) {
   $('sT').textContent = formatTime(g.t);
   $('sK').textContent = String(g.kills);
   $('sP').textContent = `${g.pages}/${TOTAL_PAGES}`;
+  $('sM').textContent = g.diff.label;
   end.hidden = false;
   $('againBtn').focus();
+}
+
+/** Build the difficulty radio group from config; calls `onChange` with the picked id. */
+export function mountDifficultyPicker(selected: DifficultyId, onChange: (id: DifficultyId) => void) {
+  const box = $('mode');
+  for (const d of Object.values(DIFFICULTY)) {
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'difficulty';
+    input.value = d.id;
+    input.checked = d.id === selected;
+    input.addEventListener('change', () => { if (input.checked) onChange(d.id); });
+    const name = document.createElement('b');
+    name.textContent = d.label;
+    const blurb = document.createElement('small');
+    blurb.textContent = d.blurb;
+    label.append(input, name, blurb);
+    box.append(label);
+  }
 }

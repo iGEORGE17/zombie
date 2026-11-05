@@ -1,4 +1,4 @@
-import { FLOW_INTERVAL, PLAYER } from '../config';
+import { FLOW_INTERVAL } from '../config';
 import type { Input } from '../input/input';
 import { updateBullets } from './combat';
 import { updateEnemies } from './enemies';
@@ -13,7 +13,7 @@ import type { Game } from './types';
 export function update(g: Game, input: Input, dt: number) {
   g.t += dt;
   updatePlayer(g, input, dt);
-  g.p.inf += dt * PLAYER.infectionPerSec;
+  g.p.inf += dt * g.diff.infectionPerSec;
 
   g.flowT -= dt;
   if (g.flowT <= 0) {

@@ -1,5 +1,5 @@
 import './styles.css';
-import { CITY_SEED } from './config';
+import { CITY_SEED, DIFFICULTY } from './config';
 import { $ } from './core/dom';
 import { newGame } from './game/state';
 import type { Game, Hooks } from './game/types';
@@ -11,7 +11,8 @@ import { attachTouch } from './input/touch';
 import { measureView, render } from './render/renderer';
 import { Hud } from './ui/hud';
 import { Radio } from './ui/radio';
-import { hideScreens, setPaused, showEnd } from './ui/screens';
+import { loadDifficulty, saveDifficulty } from './save/prefs';
+import { hideScreens, mountDifficultyPicker, setPaused, showEnd } from './ui/screens';
 import { makeLevel } from './world/level';
 
 type State = 'menu' | 'play' | 'pause' | 'end';
@@ -25,6 +26,8 @@ const input = new Input();
 
 const level = makeLevel(CITY_SEED);
 let state: State = 'menu';
+let difficulty = loadDifficulty();
+mountDifficultyPicker(difficulty, (id) => { difficulty = id; saveDifficulty(id); });
 let view = measureView(canvas);
 
 const hooks: Hooks = {
@@ -38,7 +41,7 @@ const hooks: Hooks = {
 
 function freshGame(): Game {
   radio.clear();
-  return newGame(level, hooks);
+  return newGame(level, hooks, { diff: DIFFICULTY[difficulty] });
 }
 
 // Attract mode: the menu shows a live (paused) city behind it.

@@ -23,10 +23,7 @@ export const PLAYER = {
   start: { x: 10.5 * T, y: 10.5 * T },
   radius: 11,
   hp: 100,
-  ammo: 90,
   speed: 165,
-  /** Infection fills 0→100 in 7 minutes without vials. */
-  infectionPerSec: 100 / 420,
   /** Auto-aim range for touch play. */
   autoAimRange: 430,
 };
@@ -63,10 +60,81 @@ export const SPAWN = {
   baseCap: 12, capPerSec: 1 / 8, capPerPage: 6, maxCap: 48,
   baseInterval: 0.8, intervalDecay: 1 / 400, minInterval: 0.25,
   minTiles: 13, maxTiles: 21, tries: 20,
-  runnerAfter: 40, runnerChance: 0.3,
-  bruteAfter: 120, bruteChance: 0.08,
+  runnerChance: 0.3, bruteChance: 0.08,
 };
 
-export const PICKUP = { radius: 22, ammo: 24, med: 35, vial: 18, pageCure: 8 };
+export const PICKUP = { radius: 22, med: 35, vial: 18, pageCure: 8 };
+/** Share of zombie drops that are ammo / med (rest are vials). Scavs always drop. */
+export const ZOMBIE_DROP = { ammo: 0.54, med: 0.77 };
 /** Seconds between flow-field rebuilds. */
 export const FLOW_INTERVAL = 0.25;
+
+/**
+ * Difficulty presets. Multipliers are relative to the base numbers above;
+ * `standard` is the original game exactly (all multipliers 1).
+ */
+export type DifficultyId = 'beginner' | 'standard';
+export interface Difficulty {
+  id: DifficultyId;
+  label: string;
+  blurb: string;
+  /** Infection fill rate per second (100 = turned). */
+  infectionPerSec: number;
+  startAmmo: number;
+  /** Rounds per ammo box. */
+  ammoPickup: number;
+  /** Chance a dead zombie drops something. */
+  zombieDropChance: number;
+  /** Multiplier on all enemy move speeds. */
+  enemySpeed: number;
+  /** Multiplier on all damage and bite infection taken. */
+  enemyDamage: number;
+  /** Multiplier on enemy shot / charge cooldowns (higher = slower). */
+  enemyFireDelay: number;
+  /** Multiplier on enemy bullet speed (lower = easier to dodge). */
+  enemyBulletSpeed: number;
+  /** Multiplier on time between horde spawns (higher = slower). */
+  spawnInterval: number;
+  /** Multiplier on the horde size cap. */
+  spawnCap: number;
+  /** Seconds before runners / brutes join the horde. */
+  runnerAfter: number;
+  bruteAfter: number;
+}
+
+export const DIFFICULTY: Record<DifficultyId, Difficulty> = {
+  beginner: {
+    id: 'beginner',
+    label: 'Beginner',
+    blurb: 'Slower horde, double ammo, 12 min before you turn.',
+    infectionPerSec: 100 / 720,
+    startAmmo: 180,
+    ammoPickup: 40,
+    zombieDropChance: 0.22,
+    enemySpeed: 0.75,
+    enemyDamage: 0.65,
+    enemyFireDelay: 1.5,
+    enemyBulletSpeed: 0.75,
+    spawnInterval: 1.6,
+    spawnCap: 0.6,
+    runnerAfter: 90,
+    bruteAfter: 240,
+  },
+  standard: {
+    id: 'standard',
+    label: 'Standard',
+    blurb: 'The full outbreak. 7 min before you turn.',
+    infectionPerSec: 100 / 420,
+    startAmmo: 90,
+    ammoPickup: 24,
+    zombieDropChance: 0.13,
+    enemySpeed: 1,
+    enemyDamage: 1,
+    enemyFireDelay: 1,
+    enemyBulletSpeed: 1,
+    spawnInterval: 1,
+    spawnCap: 1,
+    runnerAfter: 40,
+    bruteAfter: 120,
+  },
+};

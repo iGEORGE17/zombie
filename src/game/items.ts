@@ -10,8 +10,8 @@ export function updateItems(g: Game) {
     if (Math.hypot(it.x - p.x, it.y - p.y) > PICKUP.radius) continue;
     switch (it.type) {
       case 'ammo':
-        p.ammo += PICKUP.ammo; it.gone = true;
-        radio('Pickup', `+${PICKUP.ammo} rounds.`);
+        p.ammo += g.diff.ammoPickup; it.gone = true;
+        radio('Pickup', `+${g.diff.ammoPickup} rounds.`);
         break;
       case 'med':
         if (p.hp < PLAYER.hp) {

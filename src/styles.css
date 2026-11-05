@@ -49,6 +49,17 @@ h1 span{color:var(--serum)}
 .btn{pointer-events:auto;justify-self:start;font-family:var(--display);font-size:22px;letter-spacing:.06em;background:var(--amber);color:#1a1206;border:0;padding:12px 26px;border-radius:3px;cursor:pointer}
 .btn:hover{background:#ffc66e}
 .btn:focus-visible{outline:2px solid var(--serum);outline-offset:3px}
+/* Difficulty picker */
+.mode{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.mode legend{padding:0;margin-bottom:8px;font-size:10px;letter-spacing:.24em;color:var(--mute);text-transform:uppercase}
+.mode label{position:relative;display:grid;gap:3px;padding:10px 12px;border:1px solid var(--line);border-radius:3px;background:rgba(21,24,33,.7);cursor:pointer}
+.mode label:hover{border-color:#4a5163}
+.mode input{position:absolute;opacity:0;pointer-events:none}
+.mode b{font-family:var(--display);font-weight:400;font-size:18px;letter-spacing:.04em;color:var(--ink)}
+.mode small{font-size:11px;line-height:1.45;color:var(--mute)}
+.mode label:has(input:checked){border-color:var(--amber);background:rgba(255,181,71,.08)}
+.mode label:has(input:checked) b{color:var(--amber)}
+.mode label:has(input:focus-visible){outline:2px solid var(--serum);outline-offset:2px}
 .stat{display:flex;gap:28px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
 .stat div{display:grid;gap:2px}.stat span{font-size:9px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase}.stat b{font-size:22px;color:var(--ink);font-weight:600}
 

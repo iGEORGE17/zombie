@@ -1,13 +1,13 @@
-import { BOSS, type EnemyKind, KIND, SCAV, SIGHT_RANGE, T, ZOMBIE } from '../config';
+import { BOSS, type Difficulty, type EnemyKind, KIND, SCAV, SIGHT_RANGE, T, ZOMBIE } from '../config';
 import { type RNG, range } from '../core/rng';
 import { enemyShot, hurtPlayer } from './combat';
 import { STORY } from './missions';
 import type { Enemy, Game } from './types';
 
-export function mkEnemy(r: RNG, kind: EnemyKind, x: number, y: number): Enemy {
+export function mkEnemy(r: RNG, diff: Difficulty, kind: EnemyKind, x: number, y: number): Enemy {
   const k = KIND[kind];
   return {
-    kind, x, y, r: k.r, hp: k.hp, max: k.hp, sp: k.sp * range(r, 0.9, 1.1),
+    kind, x, y, r: k.r, hp: k.hp, max: k.hp, sp: k.sp * diff.enemySpeed * range(r, 0.9, 1.1),
     cd: range(r, 0, 1), hit: 0, ang: 0, alert: false, wob: range(r, 0, 6),
     charge: 0, chargeCd: 4, dead: false,
   };
@@ -26,7 +26,7 @@ function scav(g: Game, e: Enemy, dx: number, dy: number, d: number, see: boolean
     sp *= SCAV.strafeSpeed;
   }
   if (see && d < SCAV.fireRange && e.cd <= 0) {
-    e.cd = range(g.rng, ...SCAV.fireCd);
+    e.cd = range(g.rng, ...SCAV.fireCd) * g.diff.enemyFireDelay;
     enemyShot(g, e, Math.atan2(dy, dx) + range(g.rng, -SCAV.spread, SCAV.spread), SCAV.damage);
   }
   return { ang, sp };
@@ -39,12 +39,12 @@ function boss(g: Game, e: Enemy, dt: number, dx: number, dy: number, d: number, 
   if (e.charge > 0) { e.charge -= dt; sp *= BOSS.chargeSpeed; }
   if (e.chargeCd <= 0 && see && d < BOSS.chargeRange) {
     e.charge = BOSS.chargeTime;
-    e.chargeCd = range(g.rng, ...BOSS.chargeCd);
+    e.chargeCd = range(g.rng, ...BOSS.chargeCd) * g.diff.enemyFireDelay;
     g.hooks.radio('Kane', STORY.kaneTaunt);
   }
   const ang = see ? Math.atan2(dy, dx) : g.flow.dir(e.x, e.y);
   if (see && e.cd <= 0 && e.charge <= 0) {
-    e.cd = BOSS.volleyCd;
+    e.cd = BOSS.volleyCd * g.diff.enemyFireDelay;
     const b = Math.atan2(dy, dx), half = (BOSS.volley - 1) / 2;
     for (let k = -half; k <= half; k++) enemyShot(g, e, b + k * BOSS.volleyStep, BOSS.damage);
   }

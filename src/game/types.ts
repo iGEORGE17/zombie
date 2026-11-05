@@ -1,5 +1,5 @@
 import type { FlowField } from '../ai/flowfield';
-import type { EnemyKind } from '../config';
+import type { Difficulty, EnemyKind } from '../config';
 import type { RNG } from '../core/rng';
 import type { Level } from '../world/level';
 import type { Vec, World } from '../world/world';
@@ -48,6 +48,7 @@ export interface Game {
   /** Run-time randomness (spawns, drops, spread). World gen uses its own seeded RNG. */
   rng: RNG;
   hooks: Hooks;
+  diff: Difficulty;
   /** Written by the renderer each frame; read by mouse aiming. */
   cam: Camera;
 
