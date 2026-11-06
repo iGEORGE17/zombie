@@ -28,7 +28,25 @@ export const PLAYER = {
   autoAimRange: 430,
 };
 
-export const GUN = { cooldown: 0.17, speed: 760, life: 0.7, damage: 24, spread: 0.04, muzzle: 14 };
+/** Bullet physics shared by every firepower level. `spread` is random jitter per bullet. */
+export const GUN = { speed: 760, life: 0.7, spread: 0.04, muzzle: 14 };
+
+/**
+ * Firepower upgrades, earned by killing Ash Crew scavengers (the armed, red-headed humans).
+ * Level 0 is the starting pistol. `fan` is the angle between bullets of one trigger pull.
+ */
+export interface FirepowerLevel { name: string; damage: number; shots: number; fan: number; cooldown: number }
+export const FIREPOWER = {
+  killsPerLevel: 2,
+  levels: [
+    { name: 'Pistol', damage: 24, shots: 1, fan: 0, cooldown: 0.17 },
+    { name: 'Hot rounds', damage: 32, shots: 1, fan: 0, cooldown: 0.17 },
+    { name: 'Twin shot', damage: 32, shots: 2, fan: 0.08, cooldown: 0.16 },
+    { name: 'Triple shot', damage: 36, shots: 3, fan: 0.12, cooldown: 0.15 },
+    { name: 'Max power', damage: 44, shots: 3, fan: 0.12, cooldown: 0.12 },
+  ] as FirepowerLevel[],
+};
+export const MAX_POWER = FIREPOWER.levels.length - 1;
 export const BAT = { cooldown: 0.42, swing: 0.18, range: 48, arc: 1.1, damage: 32 };
 
 export type EnemyKind = 'walker' | 'runner' | 'brute' | 'scav' | 'boss';

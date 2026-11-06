@@ -38,6 +38,8 @@ canvas#cv{display:block;width:100%;height:100%;cursor:crosshair}
 .msg{background:var(--panel);border:1px solid var(--line);padding:8px 10px;line-height:1.45;font-size:11.5px;border-radius:3px;transition:opacity .6s}
 .msg em{font-style:normal;color:var(--serum);letter-spacing:.1em;font-size:9.5px;display:block;text-transform:uppercase}
 .msg.journal em{color:var(--amber)}
+.msg.power{border-color:rgba(255,181,71,.55)}
+.msg.power em{color:var(--amber)}
 
 /* Overlays */
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,rgba(11,13,18,.55),rgba(5,6,9,.94));

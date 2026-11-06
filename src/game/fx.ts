@@ -16,5 +16,7 @@ export function updateFx(g: Game, dt: number) {
     f.life -= dt; f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= damp; f.vy *= damp;
   }
   g.fx = g.fx.filter((f) => f.life > 0);
+  for (const u of g.popups) { u.life -= dt; u.y -= 28 * dt; }
+  g.popups = g.popups.filter((u) => u.life > 0);
   g.shake = Math.max(0, g.shake - dt * 20);
 }

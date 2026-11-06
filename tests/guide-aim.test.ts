@@ -70,15 +70,21 @@ describe('guide hints', () => {
     expect(nextHint(g, true).text).toMatch(/stick/);
   });
 
+  it('next explains that killing Ash Crew powers up the gun', () => {
+    const g = setup();
+    g.t = 8;
+    expect(nextHint(g).text).toMatch(/red-headed.*Ash Crew.*powers up your gun/);
+  });
+
   it('then points to the search zone with distance and direction', () => {
     const g = setup();
-    g.t = 10;
+    g.t = 20;
     expect(nextHint(g).text).toMatch(/Head to the amber search zone, \d+ m [a-z-]+\. Page 1 of 3/);
   });
 
   it('inside the zone it gives the exact direction to the page', () => {
     const g = setup();
-    g.t = 10;
+    g.t = 20;
     const page = g.items.find((i) => i.type === 'page')!;
     g.zone = { x: page.x, y: page.y, r: 20 * T };
     g.p.x = page.x + 8 * T; g.p.y = page.y;
@@ -87,7 +93,7 @@ describe('guide hints', () => {
 
   it('survival problems override the objective and are urgent', () => {
     const g = setup();
-    g.t = 10;
+    g.t = 20;
     g.p.inf = 80;
     expect(nextHint(g)).toMatchObject({ urgent: true, text: expect.stringMatching(/Infection critical/) });
     g.p.inf = 0; g.p.hp = 20;
@@ -98,9 +104,9 @@ describe('guide hints', () => {
 
   it('after all pages: go to the lab, then grab the antidote once Kane is down', () => {
     const g = setup();
-    g.t = 10; g.pages = 3;
+    g.t = 20; g.pages = 3;
     g.items = g.items.filter((i) => i.type !== 'page');
-    expect(nextHint(g).text).toMatch(/Head to the lab/);
+    expect(nextHint(g).text).toMatch(/Head to the lab.*Firepower Lv 0\/4: 2 more Ash Crew kills/);
     g.boss.dead = true;
     g.p.x = LAB_C.x - 20 * T; g.p.y = LAB_C.y;
     expect(nextHint(g).text).toMatch(/Grab the antidote.*\d+ m east/);

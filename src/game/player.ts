@@ -1,4 +1,4 @@
-import { BAT, GUN, PLAYER } from '../config';
+import { BAT, FIREPOWER, GUN, PLAYER } from '../config';
 import { angleDiff } from '../core/math';
 import { range } from '../core/rng';
 import type { Input } from '../input/input';
@@ -56,17 +56,20 @@ export function updatePlayer(g: Game, input: Input, dt: number) {
   }
 }
 
+/** One trigger pull: 1 round of ammo, 1–3 bullets fanned out depending on firepower. */
 function fireGun(g: Game) {
-  const p = g.p;
+  const p = g.p, lv = FIREPOWER.levels[p.power];
   p.ammo--;
-  p.cd = GUN.cooldown;
-  const a = p.ang + range(g.rng, -GUN.spread, GUN.spread);
-  g.bullets.push({
-    x: p.x + Math.cos(a) * GUN.muzzle, y: p.y + Math.sin(a) * GUN.muzzle,
-    vx: Math.cos(a) * GUN.speed, vy: Math.sin(a) * GUN.speed, life: GUN.life, dmg: GUN.damage, from: 'player',
-  });
+  p.cd = lv.cooldown;
+  for (let i = 0; i < lv.shots; i++) {
+    const a = p.ang + (i - (lv.shots - 1) / 2) * lv.fan + range(g.rng, -GUN.spread, GUN.spread);
+    g.bullets.push({
+      x: p.x + Math.cos(a) * GUN.muzzle, y: p.y + Math.sin(a) * GUN.muzzle,
+      vx: Math.cos(a) * GUN.speed, vy: Math.sin(a) * GUN.speed, life: GUN.life, dmg: lv.damage, from: 'player',
+    });
+  }
   // Muzzle flash
-  g.fx.push({ x: p.x + Math.cos(a) * 18, y: p.y + Math.sin(a) * 18, vx: 0, vy: 0, life: 0.05, max: 0.05, c: '#ffd27a', s: 7 });
+  g.fx.push({ x: p.x + Math.cos(p.ang) * 18, y: p.y + Math.sin(p.ang) * 18, vx: 0, vy: 0, life: 0.05, max: 0.05, c: '#ffd27a', s: 7 });
 }
 
 function swingBat(g: Game) {

@@ -2,7 +2,7 @@
  * Thin, never-throwing wrapper around the CrazyGames HTML5 SDK v3.
  * https://docs.crazygames.com/sdk/intro/
  *
- * The SDK script is loaded in index.html. Off CrazyGames (own domain, offline, script blocked)
+ * The SDK script is loaded async in index.html (#cg-sdk). Off CrazyGames (own domain, offline, script blocked)
  * the SDK is missing or reports `environment: "disabled"`, where every call throws, so every
  * call here is guarded and the game runs exactly the same without it.
  */
@@ -27,6 +27,20 @@ declare global {
 }
 
 let sdk: CrazySDK | null = null;
+const SDK_LOAD_TIMEOUT_MS = 10000;
+
+/** Wait for the async SDK <script> to finish (or fail, or time out). */
+function sdkScriptLoaded(): Promise<CrazySDK | undefined> {
+  if (window.CrazyGames?.SDK) return Promise.resolve(window.CrazyGames.SDK);
+  const tag = document.getElementById('cg-sdk');
+  if (!tag) return Promise.resolve(undefined);
+  return new Promise((resolve) => {
+    const done = () => resolve(window.CrazyGames?.SDK);
+    tag.addEventListener('load', done, { once: true });
+    tag.addEventListener('error', done, { once: true });
+    setTimeout(done, SDK_LOAD_TIMEOUT_MS);
+  });
+}
 let playing = false;
 let muted = false;
 const muteListeners: ((muted: boolean) => void)[] = [];
@@ -48,7 +62,7 @@ export const platform = {
    * it can take seconds, and anything requested before it resolves is replayed once it does.
    */
   async init() {
-    const candidate = window.CrazyGames?.SDK;
+    const candidate = await sdkScriptLoaded();
     if (!candidate) return;
     try {
       await candidate.init();

@@ -1,4 +1,5 @@
-import { LAB_C, T } from '../config';
+import { LAB_C, MAX_POWER, T } from '../config';
+import { killsToNextLevel } from './firepower';
 import { compass, toMetres } from '../core/math';
 import { TOTAL_PAGES } from './missions';
 import type { Game, Item, ItemType } from './types';
@@ -52,6 +53,10 @@ export function nextHint(g: Game, touch = false): Hint {
     };
   }
 
+  if (g.t < 13 && g.p.power === 0) {
+    return { urgent: false, text: 'Tip: the red-headed figures are the armed Ash Crew. Every 2 you kill powers up your gun, which you will need against their leader, Kane.' };
+  }
+
   if (g.pages < TOTAL_PAGES) {
     const page = g.items.find((i) => i.type === 'page');
     const z = g.zone;
@@ -64,8 +69,9 @@ export function nextHint(g: Game, touch = false): Hint {
   }
 
   if (!g.boss.dead) {
-    if (g.boss.alert && dist(g, g.boss.x, g.boss.y) < 12 * T) return { urgent: false, text: 'Kane charges when you get close. Keep moving sideways and keep firing.' };
-    return { urgent: false, text: `All pages found! Head to the lab (teal square on the minimap), ${where(g, LAB_C.x, LAB_C.y)}. Defeat Kane to open the vault.` };
+    const power = p.power >= MAX_POWER ? 'Firepower is maxed.' : `Firepower Lv ${p.power}/${MAX_POWER}: ${killsToNextLevel(g)} more Ash Crew kill${killsToNextLevel(g) === 1 ? '' : 's'} to power up.`;
+    if (g.boss.alert && dist(g, g.boss.x, g.boss.y) < 12 * T) return { urgent: false, text: `Kane charges when you get close. Keep moving sideways and keep firing. ${power}` };
+    return { urgent: false, text: `All pages found! Head to the lab (teal square on the minimap), ${where(g, LAB_C.x, LAB_C.y)}. Defeat Kane to open the vault. ${power}` };
   }
   return { urgent: false, text: `Kane is down! Grab the antidote in the lab courtyard, ${where(g, LAB_C.x, LAB_C.y)}.` };
 }

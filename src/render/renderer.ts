@@ -61,7 +61,9 @@ export function render(ctx: CanvasRenderingContext2D, mctx: CanvasRenderingConte
   toWorld();
   for (const it of g.items) if (it.type === 'page' || it.type === 'antidote') drawItem(ctx, g, it, true);
   for (const b of g.bullets) {
-    ctx.strokeStyle = b.from === 'player' ? '#ffd27a' : '#ff6a4d'; ctx.lineWidth = 2.5;
+    // Player rounds get thicker as firepower (damage) rises.
+    ctx.strokeStyle = b.from === 'player' ? '#ffd27a' : '#ff6a4d';
+    ctx.lineWidth = b.from === 'player' ? 2.5 * Math.sqrt(b.dmg / 24) : 2.5;
     ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(b.x - b.vx * 0.02, b.y - b.vy * 0.02); ctx.stroke();
   }
   for (const f of g.fx) {
@@ -69,6 +71,15 @@ export function render(ctx: CanvasRenderingContext2D, mctx: CanvasRenderingConte
     ctx.beginPath(); ctx.arc(f.x, f.y, f.s, 0, 7); ctx.fill();
   }
   ctx.globalAlpha = 1;
+  if (g.popups.length) {
+    ctx.font = '600 15px "IBM Plex Mono",monospace'; ctx.textAlign = 'center';
+    for (const u of g.popups) {
+      ctx.globalAlpha = Math.min(1, (u.life / u.max) * 2);
+      ctx.fillStyle = '#0b0d12'; ctx.fillText(u.text, u.x + 1, u.y + 1);
+      ctx.fillStyle = u.c; ctx.fillText(u.text, u.x, u.y);
+    }
+    ctx.globalAlpha = 1;
+  }
   if (p.target && !p.target.dead) drawReticle(ctx, p.target.x, p.target.y, p.target.r + 7, g.t);
   const b = g.boss;
   if (!b.dead && b.alert) {

@@ -37,7 +37,7 @@ Covers show only the title. They are rendered by the game itself (`tools/covers.
 
 ### Description
 
-> You've been bitten, and the infection climbs every second. Before she vanished, Dr. Ada Okoro split the antidote formula across three journal pages hidden in Lazarus City. Follow the trail page by page, fight through the undead horde and the Ash Crew's armed scavengers, then storm the lab and take the cure from their leader, Kane. Grab suppressant vials to hold off the infection and ammo to keep firing; when you run dry, swing the bat. Auto-aim locks onto the nearest threat and on-screen hints always tell you what to do next. New to it? Beginner mode gives you a slower horde, 1000 rounds and 12 minutes before you turn.
+> You've been bitten, and the infection climbs every second. Before she vanished, Dr. Ada Okoro split the antidote formula across three journal pages hidden in Lazarus City. Follow the trail page by page, fight through the undead horde and the Ash Crew's armed scavengers, then storm the lab and take the cure from their leader, Kane. Every two Ash Crew you take down powers up your gun, from hot rounds to a triple shot, and you'll want all of it for Kane. Grab suppressant vials to hold off the infection and ammo to keep firing; when you run dry, swing the bat. Auto-aim locks onto the nearest threat and on-screen hints always tell you what to do next. New to it? Beginner mode gives you a slower horde, 1000 rounds and 12 minutes before you turn.
 
 ### Controls
 
@@ -55,7 +55,7 @@ Covers show only the title. They are rendered by the game itself (`tools/covers.
 | Size ≤ 50 MB initial / 250 MB total, ≤ 1500 files | ~140 KB, 10 files |
 | Relative paths only | `base: './'`; checked in `dist/index.html` |
 | No external requests besides the SDK | Fonts are bundled (`@fontsource`); only `sdk.crazygames.com` is requested |
-| SDK v3 loaded in `<head>` before game code, `init()` before use | `index.html`, `src/platform/crazygames.ts` |
+| SDK v3 loaded in `<head>`, `init()` before use | `index.html` (async, so a slow or blocked SDK host can't stall the page), `src/platform/crazygames.ts` waits for it |
 | Game works if the SDK is missing, slow, or `disabled` | Every call is guarded; boot never waits on `init()` |
 | `gameplayStart` on start/resume, `gameplayStop` on pause/death/win/menu, not on focus loss | `src/main.ts` |
 | Midgame ad only at a natural break; game paused + muted during the ad; continues on `adError` | Retry → `platform.midgameAd()`; no audio yet, mute state is tracked for when audio lands |

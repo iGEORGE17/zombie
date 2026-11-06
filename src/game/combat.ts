@@ -1,6 +1,7 @@
 import { ENEMY_BULLET, ZOMBIE_DROP, isZombie } from '../config';
 import { reducedMotion } from '../core/env';
 import { range } from '../core/rng';
+import { onScavKilled } from './firepower';
 import { burst } from './fx';
 import { STORY } from './missions';
 import type { Enemy, Game } from './types';
@@ -39,6 +40,7 @@ export function damageEnemy(g: Game, e: Enemy, dmg: number, a: number) {
     burst(g, e.x, e.y, '#ffb547', 30, 220);
     g.hooks.objective(STORY.grabCure);
   } else if (e.kind === 'scav') {
+    onScavKilled(g);
     g.items.push({ type: r < 0.6 ? 'ammo' : r < 0.85 ? 'med' : 'vial', x: e.x, y: e.y });
   } else if (r < g.diff.zombieDropChance) {
     const u = r / g.diff.zombieDropChance;

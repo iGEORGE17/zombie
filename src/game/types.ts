@@ -11,6 +11,9 @@ export interface Player {
   cd: number; ang: number; hurt: number; swing: number;
   /** Current auto-aim lock (null in manual aim or with nothing in range). */
   target: Enemy | null;
+  /** Firepower level (0 = base pistol) and the scavenger kills that earn it. */
+  power: number;
+  scavKills: number;
 }
 
 export interface Enemy {
@@ -31,6 +34,8 @@ export interface Item { type: ItemType; x: number; y: number; n?: number; gone?:
 
 export interface Particle { x: number; y: number; vx: number; vy: number; life: number; max: number; c: string; s: number }
 export interface Decal { x: number; y: number; r: number; c: string }
+/** Floating world-space text, e.g. "FIREPOWER UP". */
+export interface Popup { x: number; y: number; text: string; life: number; max: number; c: string }
 export interface Zone { x: number; y: number; r: number }
 export interface Camera { x: number; y: number; z: number }
 
@@ -61,6 +66,7 @@ export interface Game {
   items: Item[];
   fx: Particle[];
   decals: Decal[];
+  popups: Popup[];
   boss: Enemy;
 
   pages: number;

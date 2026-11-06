@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#0b0d12">
   <title>Antidote Run</title>
   <meta name="description" content="Top-down zombie survival shooter. Follow Dr. Okoro's journal across a fallen city and take the antidote before the infection takes you.">
-  <!-- CrazyGames SDK v3: must load before game code. Safe to fail; the game runs without it. -->
-  <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+  <!-- CrazyGames SDK v3. Async so a slow or blocked SDK host can never stall the page;
+       src/platform/crazygames.ts waits for it before any SDK call, and the game runs without it. -->
+  <script async id="cg-sdk" src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 </head>
 <body>
   <div id="game"><canvas id="cv"></canvas></div>
@@ -18,6 +19,7 @@
     <div class="row"><span>Ammo</span><b id="ammo">90</b></div>
     <div class="row"><span>Journal</span><b id="pages">0 / 3</b></div>
     <div class="row"><span>Kills</span><b id="kills">0</b></div>
+    <div class="row"><span>Firepower</span><b id="power">Lv 0/4</b></div>
     <div class="row"><span>Aim <kbd class="hk">T</kbd></span><b id="aim">AUTO</b></div>
   </div>
   <div class="hud" id="mmWrap"><canvas id="mm" width="216" height="168"></canvas><div class="cap"><span>Lazarus City</span><span id="clock">00:00</span></div></div>

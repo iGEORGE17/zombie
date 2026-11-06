@@ -1,4 +1,4 @@
-import { PLAYER } from '../config';
+import { MAX_POWER, PLAYER } from '../config';
 import { $ } from '../core/dom';
 import { formatTime } from '../core/math';
 import { nextHint } from '../game/guide';
@@ -16,6 +16,7 @@ export class Hud {
   private obj = $('objT');
   private hint = $('hintT');
   private aim = $('aim');
+  private power = $('power');
 
   update(g: Game, input: Input) {
     const p = g.p;
@@ -28,6 +29,7 @@ export class Hud {
     this.ammo.textContent = p.ammo > 0 ? String(p.ammo) : 'BAT';
     this.pages.textContent = `${g.pages} / ${TOTAL_PAGES}`;
     this.kills.textContent = String(g.kills);
+    this.power.textContent = p.power >= MAX_POWER ? 'MAX' : `Lv ${p.power}/${MAX_POWER}`;
     this.clock.textContent = formatTime(g.t, true);
   }
 
